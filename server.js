@@ -3,10 +3,17 @@ const app = express();
 const path = require("path");
 const PORT = 3500;
 const { logger, logEvents } = require("./middleware/logger");
+const errorHandler = require("./middleware/errorHandler");
+const cookieParser = require("cookie-parser");
+const cors = require("cors");
 
 app.use(logger);
 
+app.use(cors());
+
 app.use(express.json());
+
+app.use(cookieParser());
 
 app.use(express.static(path.join(__dirname, "public")));
 
@@ -23,4 +30,5 @@ app.all("*", (req, res) => {
   }
 });
 
+app.use(errorHandler);
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
