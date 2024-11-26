@@ -7,9 +7,14 @@ const { logger, logEvents } = require("./middleware/logger");
 const errorHandler = require("./middleware/errorHandler");
 const cookieParser = require("cookie-parser");
 const cors = require("cors");
+const connectDB = require("./config/dbConn");
+const mongoose = require("mongoose");
+
 const corsOptions = require("./config/corsOptions");
 
 console.log(process.env.NODE_ENV);
+
+connectDB();
 
 app.use(logger);
 
@@ -23,6 +28,8 @@ app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/", require("./routes/root.js"));
 
+app.use("/users", require("./routes/userRoutes.js"));
+
 app.all("*", (req, res) => {
   res.status(404);
   if (req.accepts("html")) {
@@ -35,4 +42,17 @@ app.all("*", (req, res) => {
 });
 
 app.use(errorHandler);
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
+mongoose.connection.once("open", () => {
+  console.log("Connected to MongoDB");
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
+
+mongoose.connection.on("error", (err) => {
+  console.log(err);
+  logEvents(
+    `${err.no}: ${err.code}\t${err.syscall}\t${err.hostname}`,
+    "mongoErrLog.log"
+  );
+  process.exit(1);
+});
