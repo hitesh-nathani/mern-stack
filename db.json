@@ -1,0 +1,45 @@
+{
+  "userlist": [
+    {
+      "id": "1",
+      "name": "Hitesh",
+      "email": "hitesh@gmail.com",
+      "roles": [
+        "User"
+      ],
+      "userName": "HiteshNathani12",
+      "password": "hitesh@123",
+      "active": true
+    },
+    {
+      "id": "2",
+      "name": "Naresh",
+      "email": "naresh@gmail.com",
+      "userName": "NareshHello",
+      "password": "Naresh@123",
+      "roles": [
+        "user",
+        "admin"
+      ]
+    }
+  ],
+  "notelist": [
+    {
+      "id": "1",
+      "text": "a comment about post 1",
+      "postId": "1"
+    },
+    {
+      "id": "2",
+      "text": "another comment about post 1",
+      "postId": "1"
+    }
+  ],
+  "profile": {
+    "name": "Hitesh",
+    "email": "hitesh@dev.com",
+    "address": "Noida, India",
+    "language": "English",
+    "country": "India"
+  }
+}
