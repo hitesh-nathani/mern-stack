@@ -9,8 +9,17 @@ const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const connectDB = require("./config/dbConn");
 const mongoose = require("mongoose");
+const jsonServer = require("json-server");
+const jwt = require("jsonwebtoken");
+const bodyParser = require("body-parser");
 
 const corsOptions = require("./config/corsOptions");
+
+const server = jsonServer.create();
+const router = jsonServer.router("db.json");
+const middlewares = jsonServer.defaults();
+
+app.use(bodyParser.json());
 
 console.log(process.env.NODE_ENV);
 console.log(process.env.DATABASE_URI);
@@ -42,14 +51,44 @@ app.all("*", (req, res) => {
   }
 });
 
+app.use((req, res, next) => {
+  const authHeader = req.headers["authorization"];
+  const token = authHeader && authHeader.split(" ")[1];
+
+  if (token) {
+    jwt.verify(token, "your-secret-key", (err, user) => {
+      if (err) return res.sendStatus(403);
+      req.user = user;
+      next();
+    });
+  } else {
+    res.sendStatus(401);
+  }
+});
+
+app.post("/login", (req, res) => {
+  const { username, password } = req.body;
+
+  // Simulate user authentication (replace with your actual authentication logic)
+  const user = { username, id: 1 }; // Assuming user exists
+
+  const token = jwt.sign(user, "your-secret-key", { expiresIn: "1h" });
+  res.json({ token });
+});
+
+app.use(middlewares);
+app.use(router);
+
+app.listen(port, () => {
+  console.log(`JSON Server is running on port ${port}`);
+});
+
 app.use(errorHandler);
 
 // mongoose.connection.once("open", () => {
 //   console.log("Connected to MongoDB");
 // });
 // app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-
 
 // mongoose.connection.on("error", (err) => {
 //   console.log(err);

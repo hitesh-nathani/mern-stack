@@ -26,12 +26,14 @@
   "notelist": [
     {
       "id": "1",
-      "text": "a comment about post 1",
+      "title": "Title of post 1",
+      "description": "Title of post 1",
       "postId": "1"
     },
     {
       "id": "2",
-      "text": "another comment about post 1",
+      "title": "Title of post 2",
+      "description": "this is a comment about post 2",
       "postId": "1"
     }
   ],
@@ -39,7 +41,6 @@
     "name": "Hitesh",
     "email": "hitesh@dev.com",
     "address": "Noida, India",
-    "language": "English",
-    "country": "India"
+    "language": "English"
   }
 }
